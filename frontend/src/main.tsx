@@ -1,0 +1,25 @@
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { StrictMode } from 'react'
+import { createRoot } from 'react-dom/client'
+import { BrowserRouter } from 'react-router-dom'
+import App from './App'
+import { IdentityProvider } from './identity'
+import './index.css'
+
+// React Query caches server data, tracks loading/error state, and re-fetches
+// when we mark data as stale (after a mutation or a WebSocket event).
+const queryClient = new QueryClient({
+  defaultOptions: { queries: { staleTime: 10_000, refetchOnWindowFocus: true } },
+})
+
+createRoot(document.getElementById('root')!).render(
+  <StrictMode>
+    <QueryClientProvider client={queryClient}>
+      <IdentityProvider>
+        <BrowserRouter>
+          <App />
+        </BrowserRouter>
+      </IdentityProvider>
+    </QueryClientProvider>
+  </StrictMode>,
+)
